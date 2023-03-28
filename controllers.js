@@ -164,3 +164,28 @@ exports.delete = (req, res) => {
         } else res.send({ result:true, message: `task was deleted successfully!` });
     });
 };
+
+// SORT TASKS
+exports.sort = (req, res) => {
+
+    if (!req.body) {
+        res.status(400).send({
+            message: "Missing Parameter"
+        });
+    }
+
+    const task = new Tasks({
+        username: req.body.username,
+        id: req.body.id,
+    });
+
+    // Save to database
+    Tasks.sort(task, req.body.move, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Error"
+            });
+        else res.status(403).send(data);
+    });
+};

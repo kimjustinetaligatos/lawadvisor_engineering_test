@@ -85,4 +85,108 @@ Tasks.delete = (id, username, result) => {
     });
 };
 
+Tasks.sort = (task, move, result) => {
+
+    //GET THE TASK DETAILS
+    let query = "SELECT * FROM tasks WHERE username = ? AND id = ? LIMIT 1";
+    sql.query(query, [task.username, task.id], (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        //IFTASK FOUND
+        if (res.length){
+            const current_sort = res[0].sort;
+            if(move == "up"){
+
+                //UPPER TASK MOVE 1 DOWN
+                sql.query("UPDATE tasks SET sort = sort + 1 WHERE sort = ? AND username = ?", [(current_sort-1), task.username], (err, res) => {
+                    if (err) {
+                        console.log("error: ", err);
+                        result(null, err);
+                        return;
+                    }
+
+                    if (res.affectedRows == 0) {
+
+                        return result({ kind: "not_found" }, null);
+                    }
+
+                    console.log("updated task with sort: ", (current_sort - 1));
+
+                    //CURRENT TASK MOVE 1 UP
+                    sql.query("UPDATE tasks SET sort = sort-1 WHERE id = ? AND username = ?", [task.id, task.username], (err, res) => {
+                        if (err) {
+                            console.log("error: ", err);
+                            result(null, err);
+                            return;
+                        }
+
+                        if (res.affectedRows == 0) {
+
+                            result({ kind: "not_found" }, null);
+                            return;
+                        }
+
+                        console.log("updated task with sort: ", (current_sort - 1));
+                        result(null, {result:true, message: "task sorted"});
+                        return;
+
+                    });
+                });
+
+            }else{
+
+                //UPPER TASK MOVE 1 UP
+                sql.query("UPDATE tasks SET sort = sort - 1 WHERE sort = ? AND username = ?", [(current_sort+1), task.username], (err, res) => {
+                    if (err) {
+                        console.log("error: ", err);
+                        result(null, err);
+                        return;
+                    }
+
+                    if (res.affectedRows == 0) {
+
+                        return result({ kind: "not_found" }, null);
+                    }
+
+                    console.log("updated task with sort: ", (current_sort + 1));
+
+                    //CURRENT TASK MOVE 1 DOWN
+                    sql.query("UPDATE tasks SET sort = sort+1 WHERE id = ? AND username = ?", [task.id, task.username], (err, res) => {
+                        if (err) {
+                            console.log("error: ", err);
+                            result(null, err);
+                            return;
+                        }
+
+                        if (res.affectedRows == 0) {
+
+                            result({ kind: "not_found" }, null);
+                            return;
+                        }
+
+                        console.log("updated task with sort: ", (current_sort + 1));
+                        result(null, {result:true, message: "task sorted"});
+                        return;
+
+                    });
+                });
+
+            }
+        }else{
+            return result(null, {result:false, message: "no task found"})
+        }
+
+
+
+        console.log("tasks found: ", res[0]);
+        //result(null, res);
+    });
+
+
+};
+
+
 module.exports = Tasks;

@@ -19,10 +19,13 @@ module.exports = app => {
     router.get("/read", Auth, controller.findAll);
 
     //UPDATE TASK DETAILS
-    router.get("/update", Auth, controller.update);
+    router.put("/update", Auth, controller.update);
 
     //DELETE TASK
     router.delete("/delete/:id", Auth, controller.delete);
+
+    //SORT TASKS
+    router.put("/sort", Auth, controller.sort);
 
     app.use('/api/todos', router);
 }
