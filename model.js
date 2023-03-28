@@ -224,8 +224,18 @@ Tasks.sort = (task, move, result) => {
         console.log("tasks found: ", res[0]);
         //result(null, res);
     });
+};
 
-
+Tasks.move = (task, result) => {
+    sql.query("UPDATE tasks SET status = ? WHERE id = ? and username = ?", [task.status,task.id,task.username], (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+        console.log("Moved Tasks: ", { ...task });
+        result(null, { result:true, ...task });
+    });
 };
 
 

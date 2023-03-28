@@ -27,5 +27,8 @@ module.exports = app => {
     //SORT TASKS
     router.put("/sort", Auth, controller.sort);
 
+    //SORT TASKS
+    router.put("/move", Auth, controller.move);
+
     app.use('/api/todos', router);
 }

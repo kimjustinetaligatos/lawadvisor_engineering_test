@@ -189,3 +189,30 @@ exports.sort = (req, res) => {
         else res.status(403).send(data);
     });
 };
+
+
+// MOVE TASKS
+exports.move = (req, res) => {
+
+    if (!req.body) {
+        res.status(400).send({
+            message: "Missing Parameter"
+        });
+    }
+
+    const task = new Tasks({
+        username: req.body.username,
+        id: req.body.id,
+        status: req.body.status,
+    });
+
+    // Save to database
+    Tasks.move(task, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Error"
+            });
+        else res.status(403).send(data);
+    });
+};
