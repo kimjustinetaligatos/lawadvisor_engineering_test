@@ -67,22 +67,62 @@ Tasks.update = (task, result) => {
 };
 
 Tasks.delete = (id, username, result) => {
-    sql.query("DELETE FROM tasks WHERE id = ? and username = ?", [id, username], (err, res) => {
+
+    //GET THE TASK DETAILS
+    let query = "SELECT * FROM tasks WHERE username = ? AND id = ? LIMIT 1";
+    sql.query(query, [username, id], (err, resSelect) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
             return;
         }
+        //IF TASK FOUND
+        if (resSelect.length) {
+            sql.query("DELETE FROM tasks WHERE id = ? and username = ?", [id, username], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    result(null, err);
+                    return;
+                }
 
-        if (res.affectedRows == 0) {
+                if (res.affectedRows == 0) {
 
-            result({ kind: "not_found" }, null);
+                    result({ kind: "not_found" }, null);
+                    return;
+                }else {
+                    console.log("deleted task with id: ", id);
+                    //result(null, res);
+
+                    //RE-ARRANGE SORTING
+                    sql.query("UPDATE tasks SET sort = sort - 1 WHERE sort > ? and username = ?", [resSelect[0].sort, username], (err, res) => {
+                        if (err) {
+                            console.log("error: ", err);
+                            result(null, err);
+                            return;
+                        }
+
+                        if (res.affectedRows == 0) {
+
+                            result({ kind: "not_found" }, null);
+                            return;
+                        }else {
+                            console.log("Task sorting arranged");
+                            result(null, res);
+                        }
+
+
+                    });
+                }
+
+
+            });
+        }else{
+            result(null, resSelect);
             return;
         }
-
-        console.log("deleted task with id: ", id);
-        result(null, res);
     });
+
+
 };
 
 Tasks.sort = (task, move, result) => {
@@ -95,7 +135,7 @@ Tasks.sort = (task, move, result) => {
             result(null, err);
             return;
         }
-        //IFTASK FOUND
+        //IF TASK FOUND
         if (res.length){
             const current_sort = res[0].sort;
             if(move == "up"){

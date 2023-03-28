@@ -16,10 +16,5 @@ connection.connect(function(err) {
     }
     console.log('connected as id ' + connection.threadId);
 });
-// Start MySQL Con
-// connection.connect(error => {
-//     if (error) throw error;
-//     console.log("Successfully connected to the database.");
-// });
 
 module.exports = connection;
