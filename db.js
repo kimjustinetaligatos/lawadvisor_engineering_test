@@ -8,10 +8,18 @@ const connection = mysql.createConnection({
     database: "lawadvisor_todo"
 });
 
-// Start MySQL Con
-connection.connect(error => {
-    if (error) throw error;
-    console.log("Successfully connected to the database.");
+
+connection.connect(function(err) {
+    if (err) {
+        console.error('error connecting: ' + err.stack);
+        return;
+    }
+    console.log('connected as id ' + connection.threadId);
 });
+// Start MySQL Con
+// connection.connect(error => {
+//     if (error) throw error;
+//     console.log("Successfully connected to the database.");
+// });
 
 module.exports = connection;

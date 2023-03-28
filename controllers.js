@@ -61,28 +61,6 @@ exports.create = (req, res) => {
             message: "Missing Parameter"
         });
     }
-
-    //AUTHENTICATE USER
-    const user = new Users({
-        username: req.body.username,
-        access_token: req.body.access_token,
-    });
-    Users.authenticate(user,(err, data) => {
-        if (err){
-            res.status(500).send({
-                message:
-                    err.message || "Error Saving Car Brand"
-            });
-            return;
-        }
-        else {
-            if(!data.length){
-                return res.status(403).send({result: false, message: "Access Denied"});
-            }
-
-        };
-    });
-
     //GET LAST SORT VALUE
     Tasks.getLastSortPerUser(req.body.username, (err, data) => {
         if (err){
