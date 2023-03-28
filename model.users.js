@@ -76,4 +76,19 @@ Users.login = (user, result) => {
     });
 };
 
+Users.authenticate = (user, result) => {
+    let query = "SELECT * FROM users WHERE username = ? and access_token = ?";
+
+    sql.query(query, [user.username, user.access_token], (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+
+        console.log("user: ", res);
+        result(null, res);
+    });
+};
+
 module.exports = Users;

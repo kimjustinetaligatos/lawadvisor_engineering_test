@@ -8,5 +8,8 @@ module.exports = app => {
     //REGISTER
     router.post("/login", controller.login);
 
+    //CREATE TASK
+    router.post("/create", controller.create);
+
     app.use('/api/todos', router);
 }
