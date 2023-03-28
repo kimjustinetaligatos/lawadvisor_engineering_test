@@ -66,8 +66,8 @@ Tasks.update = (task, result) => {
     });
 };
 
-Tasks.delete = (id, result) => {
-    sql.query("DELETE FROM tasks WHERE id = ?", id, (err, res) => {
+Tasks.delete = (id, username, result) => {
+    sql.query("DELETE FROM tasks WHERE id = ? and username = ?", [id, username], (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);

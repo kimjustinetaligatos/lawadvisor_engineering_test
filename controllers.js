@@ -150,7 +150,7 @@ exports.update = (req, res) => {
 };
 
 exports.delete = (req, res) => {
-    Tasks.delete(req.params.id, (err, data) => {
+    Tasks.delete(req.params.id, req.body.username, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
