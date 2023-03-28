@@ -148,3 +148,19 @@ exports.update = (req, res) => {
         else res.status(403).send(data);
     });
 };
+
+exports.delete = (req, res) => {
+    Tasks.delete(req.params.id, (err, data) => {
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                    message: `Not found task with id ${req.params.id}.`
+                });
+            } else {
+                res.status(500).send({
+                    message: "Could not delete task with id " + req.params.id
+                });
+            }
+        } else res.send({ result:true, message: `task was deleted successfully!` });
+    });
+};

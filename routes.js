@@ -21,5 +21,8 @@ module.exports = app => {
     //UPDATE TASK DETAILS
     router.get("/update", Auth, controller.update);
 
+    //DELETE TASK
+    router.delete("/delete/:id", Auth, controller.delete);
+
     app.use('/api/todos', router);
 }
