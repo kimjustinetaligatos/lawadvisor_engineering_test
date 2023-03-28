@@ -120,3 +120,31 @@ exports.findAll = (req, res) => {
         else res.send(data);
     });
 };
+
+
+// UPDATE TASKS
+exports.update = (req, res) => {
+
+    if (!req.body) {
+        res.status(400).send({
+            message: "Missing Parameter"
+        });
+    }
+
+    const task = new Tasks({
+        username: req.body.username,
+        id: req.body.id,
+        name: req.body.name,
+        description: req.body.description,
+    });
+
+    // Save to database
+    Tasks.update(task, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Error"
+            });
+        else res.status(403).send(data);
+    });
+};

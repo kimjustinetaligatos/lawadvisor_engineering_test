@@ -53,4 +53,17 @@ Tasks.findAll = (user, result) => {
     });
 };
 
+
+Tasks.update = (task, result) => {
+    sql.query("UPDATE tasks SET name = ?, description = ? WHERE id = ? and username = ?", [task.name,task.description,task.id,task.username], (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+        console.log("Updated Tasks: ", { ...task });
+        result(null, { result:true, ...task });
+    });
+};
+
 module.exports = Tasks;

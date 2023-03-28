@@ -18,5 +18,8 @@ module.exports = app => {
     //FIND ALL TASK
     router.get("/read", Auth, controller.findAll);
 
+    //UPDATE TASK DETAILS
+    router.get("/update", Auth, controller.update);
+
     app.use('/api/todos', router);
 }
