@@ -38,4 +38,19 @@ Tasks.getLastSortPerUser = (username, result) => {
     });
 };
 
+Tasks.findAll = (user, result) => {
+    let query = "SELECT * FROM tasks WHERE username = ? ORDER BY SORT ASC";
+
+    sql.query(query, user.username, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+
+        console.log("tasks: ", res);
+        result(null, res);
+    });
+};
+
 module.exports = Tasks;

@@ -15,5 +15,8 @@ module.exports = app => {
     //CREATE TASK
     router.post("/create", Auth, controller.create);
 
+    //FIND ALL TASK
+    router.get("/read", Auth, controller.findAll);
+
     app.use('/api/todos', router);
 }

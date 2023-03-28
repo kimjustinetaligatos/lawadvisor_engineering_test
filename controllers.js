@@ -94,8 +94,29 @@ exports.create = (req, res) => {
             });
         }
     });
+};
 
 
+exports.findAll = (req, res) => {
+
+    const user = new Users({
+        username: req.body.username,
+    });
+
+    if (!req.body) {
+        res.status(400).send({
+            message: "Missing Parameter"
+        });
+    }
 
 
+    // Get All car brand in the database
+    Tasks.findAll(user, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Error Get"
+            });
+        else res.send(data);
+    });
 };
